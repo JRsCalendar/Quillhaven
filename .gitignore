@@ -1,0 +1,11 @@
+node_modules/
+data/
+.qa-*/
+*.log
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+preview*.png
+.codex/

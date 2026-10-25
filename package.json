@@ -1,0 +1,23 @@
+{
+  "name": "quillhaven",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "A quiet home for your stories and writing companions.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "mcp": "node mcp-server.mjs",
+    "mcp:client": "node scripts/mcp-client.mjs",
+    "doctor": "node scripts/check-codex.mjs",
+    "test:live": "node scripts/probe-writer.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "engines": { "node": ">=22.13" },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
+    "zod": "4.6.7"
+  }
+}

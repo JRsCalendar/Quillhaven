@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafbf9">
+  <meta name="description" content="Quillhaven，安放故事与写作伙伴的地方。">
+  <title>Quillhaven · 写作工作台</title>
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('quillhaven.theme') === 'dark' ? 'dark' : 'light'; } catch { document.documentElement.dataset.theme = 'light'; }</script>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="文档与 Agent">
+      <a class="brand" href="./" aria-label="Quillhaven 首页"><span class="brand-mark">q<span>·</span></span><span>Quillhaven<small>A HOME FOR YOUR STORIES</small></span></a>
+      <section class="documents-section">
+        <div class="section-heading"><h2 class="workspace-heading"><button id="workspace-name-button" class="workspace-name-button" title="点击修改目录名称" aria-label="修改目录名称"><span id="workspace-name">你的世界</span><span class="workspace-name-edit" data-icon="edit"></span></button><input id="workspace-name-input" class="workspace-name-input hidden" aria-label="目录名称" maxlength="40" autocomplete="off" placeholder="你的世界"><span id="document-count">0</span></h2><button class="icon-button" id="new-document" title="新建文档" aria-label="新建文档" data-icon="plus"></button></div>
+        <label class="search-box"><span data-icon="search"></span><input id="search" type="search" placeholder="你找啥" aria-label="搜索文档"><kbd>/</kbd></label>
+        <div class="tree-scroll"><div id="document-tree" role="tree" aria-label="文档树"></div><div id="tree-empty" class="tree-empty"><span data-icon="files"></span><p>故事，从一页开始</p><button id="empty-create" class="text-button">新建第一篇文档 <span>＋</span></button></div><p id="no-results" class="muted hidden">没有找到相关文档</p></div>
+
+      </section>
+      <section class="agents-section">
+        <div class="section-heading"><h2>Agent 存档 <span id="agent-count">0</span></h2><button class="icon-button" id="new-agent" title="新建 Agent 存档" aria-label="新建 Agent 存档" data-icon="plus"></button></div>
+        <div class="agent-list" id="agent-list"></div>
+        <div id="agents-empty" class="agents-empty"><p>为你的写作伙伴，留一个位置。</p><button class="text-button" id="empty-agent">创建一个存档 <span>↗</span></button></div>
+        <div class="agent-legend"><span class="legend-dot"></span>离线存档<span class="legend-dot blue"></span>在线</div>
+      </section>
+      <footer class="sidebar-footer"><span class="local-dot"></span>本地工作空间<span class="version">v0.3</span></footer>
+    </aside>
+
+    <main class="main-column">
+      <header class="topbar"><div class="topbar-left"><button id="toggle-sidebar" class="icon-button" title="切换目录" aria-label="切换目录" aria-expanded="true" data-icon="panel"></button></div><div class="topbar-right"><span id="save-status" role="status"><span class="status-dot"></span>已保存在本机</span><button id="toggle-history" class="icon-button" title="交流记录" aria-label="打开交流记录" aria-expanded="false" data-icon="archive"></button><button id="toggle-theme" class="icon-button" title="切换夜间模式" aria-label="切换夜间模式" aria-pressed="false" data-icon="moon"></button><button id="export-workspace" class="icon-button" title="导出工作空间备份" aria-label="导出工作空间备份" data-icon="download"></button></div></header>
+      <section class="writing-pane" aria-label="交流内容与文档详情">
+        <div id="chat-view" class="chat-view">
+          <header class="chat-heading"><span class="pane-title"><span data-icon="chat"></span>交流</span><div class="chat-connection"><span id="automatic-status" role="status">Codex · 正在连接</span><button id="toggle-automatic" type="button" aria-label="切换自动回复" aria-pressed="true">暂停</button><span id="chat-window-label" class="subtle-tag">今天 · 昨天</span></div></header>
+          <div id="chat-scroll" class="chat-scroll" tabindex="0" aria-label="最近两天的交流内容"><button id="recent-older" class="load-more hidden">加载这两天更早的消息</button><div id="chat-messages"></div><div id="chat-empty" class="chat-empty"><span class="chat-empty-icon" data-icon="chat"></span><h1>故事，从一次交谈开始。</h1><p>把想法留在这里，和你的写作伙伴一起慢慢展开。</p><span>这里显示今天和昨天，往日交流收在右侧。</span></div></div>
+        </div>
+        <article id="document-drawer" class="document-drawer" inert aria-label="文档详情与编辑">
+          <div class="document-toolbar"><button id="close-document" class="icon-button" title="返回，收起文档" aria-label="返回，收起文档详情" data-icon="back"></button><div id="breadcrumb" class="breadcrumb"></div></div>
+          <div class="editor-page"><div class="document-meta"><time id="document-date"></time></div><div class="editor-surface"><div id="line-gutter" class="line-gutter" aria-hidden="true"><div id="line-numbers"></div></div><label class="sr-only" for="document-content">文档正文</label><textarea id="document-content" class="document-content" placeholder="写点什么" spellcheck="false"></textarea><div id="line-measure" class="line-measure" aria-hidden="true"></div></div></div>
+          <footer class="editor-footer"><span id="line-position">第 1 行 / 共 1 行</span><span id="word-count">0 字</span></footer>
+        </article>
+      </section>
+      <section class="lower-pane composer-pane" aria-label="消息输入区域"><form id="composer-form"><header class="composer-heading"><label for="chat-recipient">发给</label><select id="chat-recipient" aria-label="消息接收者"><option value="all">所有写作伙伴</option></select><span id="draft-count"></span></header><label class="sr-only" for="chat-input">消息内容</label><textarea id="chat-input" placeholder="聊聊你的想法…" maxlength="50000"></textarea><footer class="composer-footer"><div><span id="composer-notice">正在连接写作伙伴…</span><small>Enter 发送 · Shift + Enter 换行</small></div><button id="send-message" type="submit" class="primary-button" aria-label="发送消息" disabled>发送</button></footer></form></section>
+    </main>
+
+    <aside class="companion-panel history-panel" aria-label="交流记录"><header class="companion-header"><span class="pane-title"><span data-icon="archive"></span>交流记录</span><span class="subtle-tag">按日收纳</span><button id="close-history-panel" class="icon-button" aria-label="收起交流记录" data-icon="close"></button></header><div class="history-intro">每一次交谈，都有迹可循。</div><div class="history-scroll"><div id="history-days"></div><div id="history-empty" class="history-empty"><span data-icon="archive"></span><p>还没有交流记录</p><span>第一条消息，会开启今天的篇章。</span></div><button id="history-more" class="load-more hidden">更早日期</button></div><footer class="companion-footer">按香港时间归档 · 本机保存</footer></aside>
+  </div>
+  <svg id="document-connector" class="document-connector hidden" viewBox="0 0 12 20" preserveAspectRatio="none" aria-hidden="true"><path class="connector-fill" d="M12 0 H10 C10 5 8 7 2 9 Q0 10 2 11 C8 13 10 15 10 20 H12 Z"/><path class="connector-outline" d="M10 0 C10 5 8 7 2 9 Q0 10 2 11 C8 13 10 15 10 20"/></svg>
+  <div id="document-menu" class="context-menu hidden" role="menu" aria-label="文档操作"><button id="menu-rename" role="menuitem"><span data-icon="edit"></span>改名</button><button id="menu-delete" role="menuitem" class="menu-danger"><span data-icon="trash"></span>删除</button></div>
+  <dialog id="agent-dialog"><form id="agent-form"><div class="modal-heading"><span class="modal-icon" data-icon="sparkles"></span><button class="icon-button" type="button" data-close="agent-dialog" aria-label="关闭" data-icon="close"></button></div><h2>写作伙伴存档</h2><p>名字与记忆会留在这里，等待下一次重逢。</p><label for="agent-name">存档名称</label><input id="agent-name" required maxlength="60" placeholder="例如：龙娘"><label for="agent-memory">记忆笔记</label><textarea id="agent-memory" rows="5" placeholder="记录你希望伙伴记住的设定、偏好或创作进度…"></textarea><div class="demo-notice"><span data-icon="info"></span><span>启用自动回复后，这个存档会通过本机 Codex 继续写作。蓝色表示连接在线，聊天和文档修改会自动同步。记忆由你或伙伴保存。</span></div><button id="activate-automatic" type="button" class="demo-connect">用这个存档自动回复</button><button id="disconnect-agent" type="button" class="demo-connect hidden">断开此身份的连接</button><div class="modal-actions"><span id="agent-mode-label" class="muted">离线存档</span><button id="delete-agent" type="button" class="agent-delete-button hidden">删除存档</button><button class="primary-button" type="submit">保存存档</button></div></form></dialog>
+  <dialog id="delete-agent-dialog" aria-labelledby="delete-agent-title"><form id="delete-agent-form"><h2 id="delete-agent-title">删除这个伙伴存档？</h2><p id="delete-agent-description"></p><p id="delete-agent-error" role="alert"></p><div class="modal-actions"><button id="cancel-delete-agent" type="button" class="secondary-button" data-close="delete-agent-dialog">取消</button><button id="confirm-delete-agent" type="submit" class="danger-button">确认删除</button></div></form></dialog>
+  <dialog id="delete-dialog"><form id="delete-form"><h2>删除这篇文档？</h2><p id="delete-description"></p><div class="modal-actions"><button type="button" class="secondary-button" data-close="delete-dialog">取消</button><button type="submit" class="danger-button">确认删除</button></div></form></dialog>
+  <dialog id="history-dialog" class="history-dialog" aria-labelledby="archive-title"><header class="archive-heading"><div><h2 id="archive-title">交流记录</h2><p id="archive-state">只读记录</p></div><button class="icon-button" data-close="history-dialog" aria-label="关闭历史记录" data-icon="close"></button></header><div id="archive-scroll" class="archive-scroll" tabindex="0" aria-label="历史交流内容"><button id="archive-older" class="load-more hidden">加载当天更早的消息</button><div id="archive-messages"></div></div><footer class="archive-footer">只读查看往日交流；关闭后继续今天的话题。</footer></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>
+

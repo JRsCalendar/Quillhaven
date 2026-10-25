@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "quillhaven": {
+      "command": "node",
+      "args": ["C:/path/to/Quillhaven/mcp-server.mjs"]
+    }
+  }
+}
